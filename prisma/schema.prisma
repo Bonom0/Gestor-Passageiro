@@ -13,6 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//define a tabela no banco
 model Passageiro {
   id String @id @default(uuid())
   nome String
