@@ -1,9 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePassageiroDto } from './dto/create-passageiro.dto';
 import { UpdatePassageiroDto } from './dto/update-passageiro.dto';
+import { Passageiro } from './entities/passageiro.entity';
+import { PrismaService } from 'prisma/prisma.service';
 
 @Injectable()
 export class PassageiroService {
+
+  constructor(private prisma: PrismaService){
+
+  }
+
   create(createPassageiroDto: CreatePassageiroDto) {
     return 'This action adds a new passageiro';
   }
