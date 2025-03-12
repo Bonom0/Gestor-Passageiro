@@ -7,6 +7,6 @@ export class Passageiro {
     rua: string;
     contato: string;
     horario_embarque: Date;
-    id_motorista: number;
+    id_motorista: string;
     ativo: boolean;
 }
