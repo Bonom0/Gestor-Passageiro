@@ -25,4 +25,6 @@ model Passageiro {
   horario_embarque DateTime
   id_motorista String
   ativo Boolean @default(true)
+  dta_insert DateTime
+  tipo String
 }
