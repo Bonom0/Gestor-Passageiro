@@ -23,11 +23,15 @@ export class PassageiroService {
       ativo: passageiro.ativo,
       dta_insert: passageiro.dta_insert,
       tipo: passageiro.tipo,
+      email: passageiro.email,
     };
   }
 
-  create(createPassageiroDto: CreatePassageiroDto) {
-    return 'This action adds a new passageiro';
+  async create(createPassageiroDto: CreatePassageiroDto): Promise<Passageiro> {
+    const passageiro = await this.prisma.passageiro.create({
+      data: createPassageiroDto,
+    });
+    return this.mapToEntity(passageiro);
   }
 
   async findAll(): Promise<Passageiro[]> {
@@ -40,8 +44,12 @@ export class PassageiroService {
     return `This action returns a #${id} passageiro`;
   }
 
-  update(id: number, updatePassageiroDto: UpdatePassageiroDto) {
-    return `This action updates a #${id} passageiro`;
+  async update(id: string, updatePassageiroDto: UpdatePassageiroDto) {
+    const passageiro = await this.prisma.passageiro.update({
+      where: { id },
+      data: updatePassageiroDto,
+    });
+    return this.mapToEntity(passageiro);
   }
 
   remove(id: number) {
