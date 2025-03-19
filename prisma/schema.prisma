@@ -27,4 +27,5 @@ model Passageiro {
   ativo Boolean @default(true)
   dta_insert DateTime
   tipo String
+  email String
 }
