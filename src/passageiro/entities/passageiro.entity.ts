@@ -11,4 +11,5 @@ export class Passageiro {
   ativo: boolean;
   dta_insert: Date;
   tipo: string;
+  email: string;
 }
