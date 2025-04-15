@@ -27,7 +27,7 @@ export class PassageiroController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.passageiroService.findOne(+id);
+    return this.passageiroService.findOne(id);
   }
 
   @Patch(':id')
@@ -35,11 +35,11 @@ export class PassageiroController {
     @Param('id') id: string,
     @Body() updatePassageiroDto: UpdatePassageiroDto,
   ) {
-    return this.passageiroService.update(+id, updatePassageiroDto);
+    return this.passageiroService.update(id, updatePassageiroDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.passageiroService.remove(+id);
+    return this.passageiroService.remove(id);
   }
 }
