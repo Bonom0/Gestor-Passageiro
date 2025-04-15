@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePassageiroDto } from './dto/create-passageiro.dto';
 import { UpdatePassageiroDto } from './dto/update-passageiro.dto';
 import { Passageiro } from './entities/passageiro.entity';
@@ -40,8 +40,16 @@ export class PassageiroService {
     return passageiro.map((passageiro) => this.mapToEntity(passageiro)); //map faz o parse do obj
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} passageiro`;
+  async findOne(id: string): Promise<Passageiro> {
+    const passageiro = await this.prisma.passageiro.findUnique({
+      where: { id },
+    });
+
+    if (!passageiro) {
+      throw new NotFoundException(`Passageiro com ID${id} não encontrado`);
+    }
+
+    return this.mapToEntity(passageiro);
   }
 
   async update(id: string, updatePassageiroDto: UpdatePassageiroDto) {
@@ -52,7 +60,19 @@ export class PassageiroService {
     return this.mapToEntity(passageiro);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} passageiro`;
+  async remove(id: string): Promise<Passageiro> {
+    const passageiroExistente = await this.prisma.passageiro.findUnique({
+      where: { id },
+    });
+
+    if (!passageiroExistente) {
+      throw new NotFoundException(`Passageiro com ID ${id} não encontrado`);
+    }
+
+    const passageiroRemovido = await this.prisma.passageiro.delete({
+      where: { id },
+    });
+
+    return this.mapToEntity(passageiroRemovido);
   }
 }
