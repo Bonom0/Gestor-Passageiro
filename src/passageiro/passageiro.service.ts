@@ -29,7 +29,20 @@ export class PassageiroService {
 
   async create(createPassageiroDto: CreatePassageiroDto): Promise<Passageiro> {
     const passageiro = await this.prisma.passageiro.create({
-      data: createPassageiroDto,
+      data: {
+        nome: createPassageiroDto.nome,
+        cpf: createPassageiroDto.cpf,
+        senha: createPassageiroDto.senha,
+        cep: createPassageiroDto.senha,
+        rua: createPassageiroDto.rua,
+        contato: createPassageiroDto.contato,
+        horario_embarque: createPassageiroDto.horario_embarque,
+        id_motorista: createPassageiroDto.id_motorista,
+        ativo: createPassageiroDto.ativo,
+        dta_insert: createPassageiroDto.dta_insert,
+        tipo: createPassageiroDto.tipo,
+        email: createPassageiroDto.email,
+      },
     });
     return this.mapToEntity(passageiro);
   }
