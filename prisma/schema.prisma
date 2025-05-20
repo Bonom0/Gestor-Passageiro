@@ -17,7 +17,7 @@ datasource db {
 model Passageiro {
   id String @id @default(uuid())
   nome String
-  cpf String
+  cpf String @unique
   senha String
   cep String
   rua String
