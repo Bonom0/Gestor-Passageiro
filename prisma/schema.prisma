@@ -29,3 +29,14 @@ model Passageiro {
   tipo String
   email String
 }
+
+model Empresa {
+  id String @id @default(uuid())
+  fantasia String
+  cnpj String
+}
+
+model TipoUsuario {
+  id String @id @default(uuid())
+  descricao String
+}
