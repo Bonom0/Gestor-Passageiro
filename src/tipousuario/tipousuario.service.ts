@@ -12,14 +12,16 @@ export class TipoUsuarioService {
     //pega o obj do banco e faz um parse para o modelo do nest
     return {
       id: tipousuario.id,
-      descricao: tipousuario.descricao
+      descricao: tipousuario.descricao,
     };
   }
 
-  async create(createTipoUsuarioDto: CreateTipoUsuarioDto): Promise<TipoUsuario> {
-    const tipousuario = await this.prisma.tipousuario.create({
+  async create(
+    createTipoUsuarioDto: CreateTipoUsuarioDto,
+  ): Promise<TipoUsuario> {
+    const tipousuario = await this.prisma.tipoUsuario.create({
       data: {
-        descricao: createTipoUsuarioDto.descricao
+        descricao: createTipoUsuarioDto.descricao,
       },
     });
     return this.mapToEntity(tipousuario);
@@ -27,12 +29,12 @@ export class TipoUsuarioService {
 
   async findAll(): Promise<TipoUsuario[]> {
     //faz a busca de todas os tipos de usuário no banco de dados
-    const tipousuario = await this.prisma.tipousuario.findMany(); //faz a busca de todos os objs no banco
+    const tipousuario = await this.prisma.tipoUsuario.findMany(); //faz a busca de todos os objs no banco
     return tipousuario.map((tipousuario) => this.mapToEntity(tipousuario)); //map faz o parse do obj
   }
 
   async findOne(id: string): Promise<TipoUsuario> {
-    const tipousuario = await this.prisma.tipousuario.findUnique({
+    const tipousuario = await this.prisma.tipoUsuario.findUnique({
       where: { id },
     });
 
@@ -44,7 +46,7 @@ export class TipoUsuarioService {
   }
 
   async update(id: string, updateTipoUsuarioDto: UpdateTipoUsuarioDto) {
-    const tipousuario = await this.prisma.tipousuario.update({
+    const tipousuario = await this.prisma.tipoUsuario.update({
       where: { id },
       data: updateTipoUsuarioDto,
     });
@@ -52,15 +54,17 @@ export class TipoUsuarioService {
   }
 
   async remove(id: string): Promise<TipoUsuario> {
-    const tipousuarioExistente = await this.prisma.tipousuario.findUnique({
+    const tipousuarioExistente = await this.prisma.tipoUsuario.findUnique({
       where: { id },
     });
 
     if (!tipousuarioExistente) {
-      throw new NotFoundException(`Tipo de usuário com ID ${id} não encontrado`);
+      throw new NotFoundException(
+        `Tipo de usuário com ID ${id} não encontrado`,
+      );
     }
 
-    const tipousuarioRemovido = await this.prisma.tipousuario.delete({
+    const tipousuarioRemovido = await this.prisma.tipoUsuario.delete({
       where: { id },
     });
 
