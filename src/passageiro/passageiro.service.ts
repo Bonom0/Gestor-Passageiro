@@ -47,9 +47,24 @@ export class PassageiroService {
     return this.mapToEntity(passageiro);
   }
 
-  async findAll(): Promise<Passageiro[]> {
+  async findAll(
+    nome?: string,
+    email?: string,
+    sort: 'nome' | 'email' = 'nome',
+    direction: 'asc' | 'desc' = 'asc',
+  ): Promise<Passageiro[]> {
     //faz a busca de todos os passageiros no banco de dados
-    const passageiro = await this.prisma.passageiro.findMany(); //faz a busca de todos os objs no banco
+    const passageiro = await this.prisma.passageiro.findMany({
+      where: {
+        ...(nome?.trim() && {
+          nome: { contains: nome, mode: 'insensitive' },
+        }),
+        ...(email?.trim() && {
+          email: { contains: email, mode: 'insensitive' },
+        }),
+      },
+      orderBy: { [sort]: direction },
+    }); //faz a busca de todos os objs no banco
     return passageiro.map((passageiro) => this.mapToEntity(passageiro)); //map faz o parse do obj
   }
 

@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { PassageiroService } from './passageiro.service';
 import { CreatePassageiroDto } from './dto/create-passageiro.dto';
@@ -21,8 +22,13 @@ export class PassageiroController {
   }
 
   @Get()
-  findAll() {
-    return this.passageiroService.findAll();
+  findAll(
+    @Query('nome') nome?: string,
+    @Query('email') email?: string,
+    @Query('sort') sort: 'nome' | 'email' = 'nome',
+    @Query('order') order: 'asc' | 'desc' = 'asc',
+  ) {
+    return this.passageiroService.findAll(nome, email);
   }
 
   @Get(':id')
