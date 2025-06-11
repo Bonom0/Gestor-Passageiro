@@ -15,28 +15,55 @@ datasource db {
 
 //define a tabela no banco
 model Passageiro {
-  id String @id @default(uuid())
-  nome String
-  cpf String @unique
-  senha String
-  cep String
-  rua String
-  contato String
+  id               String     @id @default(uuid())
+  nome             String
+  cpf              String     @unique
+  senha            String
+  cep              String
+  rua              String
+  contato          String
   horario_embarque DateTime
-  id_motorista String
-  ativo Boolean @default(true)
-  dta_insert DateTime
-  tipo String
-  email String
+  id_motorista     String
+  motorista        Motorista  @relation(fields: [id_motorista], references: [id])
+  ativo            Boolean    @default(true)
+  dta_insert       DateTime
+  tipo             String
+  tipoUsuario      TipoUsuario @relation(fields: [tipo], references: [id])
+  email            String
 }
 
 model Empresa {
-  id String @id @default(uuid())
+  id       String     @id @default(uuid())
   fantasia String
-  cnpj String
+  cnpj     String
+  operadores Operador[]
 }
 
 model TipoUsuario {
-  id String @id @default(uuid())
-  descricao String
+  id          String       @id @default(uuid())
+  descricao   String
+  passageiros Passageiro[]
+  operadores  Operador[]
+}
+
+model Operador {
+  id        String      @id @default(uuid())
+  nome      String
+  email     String
+  senha     String
+  empresa   String
+  empresaRef Empresa    @relation(fields: [empresa], references: [id])
+  tipo      String
+  tipoRef   TipoUsuario @relation(fields: [tipo], references: [id])
+}
+
+model Motorista {
+  id         String       @id @default(uuid())
+  nome       String
+  cpf        String
+  contato    String
+  email      String
+  senha      String
+  tipo       String
+  passageiros Passageiro[]
 }
