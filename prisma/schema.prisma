@@ -15,28 +15,49 @@ datasource db {
 
 //define a tabela no banco
 model Passageiro {
-  id               String     @id @default(uuid())
+  id               String      @id @default(uuid())
   nome             String
-  cpf              String     @unique
+  cpf              String      @unique
   senha            String
   cep              String
   rua              String
   contato          String
   horario_embarque DateTime
   id_motorista     String
-  motorista        Motorista  @relation(fields: [id_motorista], references: [id])
-  ativo            Boolean    @default(true)
+  motorista        Motorista   @relation(fields: [id_motorista], references: [id])
+  ativo            Boolean     @default(true)
   dta_insert       DateTime
-  tipo             String
-  tipoUsuario      TipoUsuario @relation(fields: [tipo], references: [id])
+  tipo_usuario_id  String
+  tipo             TipoUsuario @relation(fields: [tipo_usuario_id], references: [id])
   email            String
 }
 
+model Operador {
+  id              String      @id @default(uuid())
+  nome            String
+  email           String
+  senha           String
+  empresa         String
+  tipo_usuario_id String
+  tipo            TipoUsuario @relation(fields: [tipo_usuario_id], references: [id])
+}
+
+model Motorista {
+  id              String       @id @default(uuid())
+  nome            String
+  cpf             String
+  contato         String
+  email           String
+  senha           String
+  tipo_usuario_id String
+  tipo            TipoUsuario  @relation(fields: [tipo_usuario_id], references: [id])
+  Passageiro      Passageiro[]
+}
+
 model Empresa {
-  id       String     @id @default(uuid())
+  id       String @id @default(uuid())
   fantasia String
   cnpj     String
-  operadores Operador[]
 }
 
 model TipoUsuario {
@@ -44,26 +65,5 @@ model TipoUsuario {
   descricao   String
   passageiros Passageiro[]
   operadores  Operador[]
-}
-
-model Operador {
-  id        String      @id @default(uuid())
-  nome      String
-  email     String
-  senha     String
-  empresa   String
-  empresaRef Empresa    @relation(fields: [empresa], references: [id])
-  tipo      String
-  tipoRef   TipoUsuario @relation(fields: [tipo], references: [id])
-}
-
-model Motorista {
-  id         String       @id @default(uuid())
-  nome       String
-  cpf        String
-  contato    String
-  email      String
-  senha      String
-  tipo       String
-  passageiros Passageiro[]
+  motoristas  Motorista[]
 }
