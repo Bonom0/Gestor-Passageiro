@@ -26,10 +26,14 @@ export class MotoristaService {
       data: {
         nome: createMotoristaDto.nome,
         cpf: createMotoristaDto.cpf,
-        senha: createMotoristaDto.senha,
         contato: createMotoristaDto.contato,
-        tipo: createMotoristaDto.tipo,
         email: createMotoristaDto.email,
+        senha: createMotoristaDto.senha,
+        tipo: {
+          connect: {
+            id: createMotoristaDto.tipo,
+          },
+        },
       },
     });
     return this.mapToEntity(motorista);
@@ -68,11 +72,24 @@ export class MotoristaService {
     return this.mapToEntity(motorista);
   }
 
-  async update(id: string, updateMotoristaDto: UpdateMotoristaDto) {
+  async update(
+    id: string,
+    updateMotoristaDto: UpdateMotoristaDto,
+  ): Promise<Motorista> {
+    const { tipo, ...restoDosCampos } = updateMotoristaDto;
+
     const motorista = await this.prisma.motorista.update({
       where: { id },
-      data: updateMotoristaDto,
+      data: {
+        ...restoDosCampos,
+        ...(tipo && {
+          tipo: {
+            connect: { id: tipo },
+          },
+        }),
+      },
     });
+
     return this.mapToEntity(motorista);
   }
 

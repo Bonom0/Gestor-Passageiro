@@ -33,17 +33,25 @@ export class PassageiroService {
         nome: createPassageiroDto.nome,
         cpf: createPassageiroDto.cpf,
         senha: createPassageiroDto.senha,
-        cep: createPassageiroDto.senha,
+        cep: createPassageiroDto.cep,
         rua: createPassageiroDto.rua,
         contato: createPassageiroDto.contato,
-        horario_embarque: createPassageiroDto.horario_embarque,
-        id_motorista: createPassageiroDto.id_motorista,
-        ativo: createPassageiroDto.ativo,
-        dta_insert: createPassageiroDto.dta_insert,
-        tipo: createPassageiroDto.tipo,
+        horario_embarque: new Date(createPassageiroDto.horario_embarque),
+        dta_insert: new Date(),
         email: createPassageiroDto.email,
+        tipo: {
+          connect: {
+            id: createPassageiroDto.tipo,
+          },
+        },
+        motorista: {
+          connect: {
+            id: createPassageiroDto.id_motorista,
+          },
+        },
       },
     });
+
     return this.mapToEntity(passageiro);
   }
 
@@ -80,11 +88,29 @@ export class PassageiroService {
     return this.mapToEntity(passageiro);
   }
 
-  async update(id: string, updatePassageiroDto: UpdatePassageiroDto) {
+  async update(
+    id: string,
+    updatePassageiroDto: UpdatePassageiroDto,
+  ): Promise<Passageiro> {
+    const { tipo, id_motorista, ...restoDosCampos } = updatePassageiroDto;
+
     const passageiro = await this.prisma.passageiro.update({
       where: { id },
-      data: updatePassageiroDto,
+      data: {
+        ...restoDosCampos,
+        ...(tipo && {
+          tipo: {
+            connect: { id: tipo },
+          },
+        }),
+        ...(id_motorista && {
+          motorista: {
+            connect: { id: id_motorista },
+          },
+        }),
+      },
     });
+
     return this.mapToEntity(passageiro);
   }
 

@@ -5,7 +5,7 @@ import { Operador } from './entities/operador.entity';
 import { PrismaService } from 'prisma/prisma.service';
 
 @Injectable()
-export class Operadorervice {
+export class OperadorService {
   constructor(private prisma: PrismaService) {}
 
   private mapToEntity(operador: any): Operador {
@@ -27,7 +27,11 @@ export class Operadorervice {
         email: createOperadorDto.email,
         senha: createOperadorDto.senha,
         empresa: createOperadorDto.empresa,
-        tipo: createOperadorDto.tipo,
+        tipo: {
+          connect: {
+            id: createOperadorDto.tipo,
+          },
+        },
       },
     });
     return this.mapToEntity(operador);
@@ -66,11 +70,24 @@ export class Operadorervice {
     return this.mapToEntity(operador);
   }
 
-  async update(id: string, updateOperadorDto: UpdateOperadorDto) {
+  async update(
+    id: string,
+    updateOperadorDto: UpdateOperadorDto,
+  ): Promise<Operador> {
+    const { tipo, ...restoDosCampos } = updateOperadorDto;
+
     const operador = await this.prisma.operador.update({
       where: { id },
-      data: updateOperadorDto,
+      data: {
+        ...restoDosCampos,
+        ...(tipo && {
+          tipo: {
+            connect: { id: tipo },
+          },
+        }),
+      },
     });
+
     return this.mapToEntity(operador);
   }
 
