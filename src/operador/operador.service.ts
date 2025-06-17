@@ -26,7 +26,9 @@ export class OperadorService {
         nome: createOperadorDto.nome,
         email: createOperadorDto.email,
         senha: createOperadorDto.senha,
-        empresa: createOperadorDto.empresa,
+        empresa: {
+          connect: { id: createOperadorDto.empresa }, // <-- aqui o connect correto
+        },
         tipo: {
           connect: {
             id: createOperadorDto.tipo,
@@ -74,7 +76,7 @@ export class OperadorService {
     id: string,
     updateOperadorDto: UpdateOperadorDto,
   ): Promise<Operador> {
-    const { tipo, ...restoDosCampos } = updateOperadorDto;
+    const { tipo, empresa, ...restoDosCampos } = updateOperadorDto;
 
     const operador = await this.prisma.operador.update({
       where: { id },
@@ -85,9 +87,13 @@ export class OperadorService {
             connect: { id: tipo },
           },
         }),
+        ...(empresa && {
+          empresa: {
+            connect: { id: empresa },
+          },
+        }),
       },
     });
-
     return this.mapToEntity(operador);
   }
 
