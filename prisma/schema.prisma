@@ -37,7 +37,10 @@ model Operador {
   nome            String
   email           String
   senha           String
-  empresa         String
+
+  empresa_id      String
+  empresa         Empresa     @relation(fields: [empresa_id], references: [id])
+
   tipo_usuario_id String
   tipo            TipoUsuario @relation(fields: [tipo_usuario_id], references: [id])
 }
@@ -55,9 +58,11 @@ model Motorista {
 }
 
 model Empresa {
-  id       String @id @default(uuid())
-  fantasia String
-  cnpj     String
+  id         String     @id @default(uuid())
+  fantasia   String
+  cnpj       String
+
+  operadores Operador[]
 }
 
 model TipoUsuario {
