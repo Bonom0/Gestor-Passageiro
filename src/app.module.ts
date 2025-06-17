@@ -5,6 +5,7 @@ import { PassageiroModule } from './passageiro/passageiro.module';
 import { EmpresaModule } from './empresa/empresa.module';
 import { TipoUsuarioModule } from './tipousuario/tipousuario.module';
 import { OperadorModule } from './operador/operador.module';
+import { MotoristaModule } from './motorista/motorista.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { OperadorModule } from './operador/operador.module';
     TipoUsuarioModule,
     OperadorModule,
     EmpresaModule,
+    MotoristaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
