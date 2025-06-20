@@ -108,4 +108,12 @@ export class MotoristaService {
 
     return this.mapToEntity(motoristaRemovido);
   }
+
+  async findByEmail(email: string): Promise<Motorista | null> {
+    const motorista = await this.prisma.motorista.findFirst({
+      where: { email },
+    })
+
+    return motorista ? this.mapToEntity(motorista) : null;
+  }
 }
