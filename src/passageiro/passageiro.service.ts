@@ -129,4 +129,12 @@ export class PassageiroService {
 
     return this.mapToEntity(passageiroRemovido);
   }
+
+  async findByEmail(email: string): Promise<Passageiro | null> {
+      const passageiro = await this.prisma.passageiro.findFirst({
+        where: { email },
+      })
+  
+      return passageiro ? this.mapToEntity(passageiro) : null;
+    }
 }
