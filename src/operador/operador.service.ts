@@ -112,4 +112,12 @@ export class OperadorService {
 
     return this.mapToEntity(operadorRemovido);
   }
+
+  async findByEmail(email: string): Promise<Operador | null> {
+    const operador = await this.prisma.operador.findFirst({
+      where: { email },
+    });
+
+    return operador ? this.mapToEntity(operador): null
+  }
 }
