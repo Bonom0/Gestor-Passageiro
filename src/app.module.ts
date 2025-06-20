@@ -6,6 +6,7 @@ import { EmpresaModule } from './empresa/empresa.module';
 import { TipoUsuarioModule } from './tipousuario/tipousuario.module';
 import { OperadorModule } from './operador/operador.module';
 import { MotoristaModule } from './motorista/motorista.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { MotoristaModule } from './motorista/motorista.module';
     OperadorModule,
     EmpresaModule,
     MotoristaModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
