@@ -2,7 +2,6 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { OperadorService } from "src/operador/operador.service";
 import { MotoristaService } from "src/motorista/motorista.service";
 import { PassageiroService } from "src/passageiro/passageiro.service";
-import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
