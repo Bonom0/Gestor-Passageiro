@@ -7,6 +7,7 @@ import { TipoUsuarioModule } from './tipousuario/tipousuario.module';
 import { OperadorModule } from './operador/operador.module';
 import { MotoristaModule } from './motorista/motorista.module';
 import { AuthModule } from './auth/auth.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -14,9 +15,9 @@ import { AuthModule } from './auth/auth.module';
     EmpresaModule,
     TipoUsuarioModule,
     OperadorModule,
-    EmpresaModule,
     MotoristaModule,
     AuthModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
