@@ -116,4 +116,8 @@ export class MotoristaService {
 
     return motorista ? this.mapToEntity(motorista) : null;
   }
+
+  async countAll(): Promise<number> {
+    return await this.prisma.motorista.count();
+  }
 }

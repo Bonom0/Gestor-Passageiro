@@ -131,10 +131,14 @@ export class PassageiroService {
   }
 
   async findByEmail(email: string): Promise<Passageiro | null> {
-      const passageiro = await this.prisma.passageiro.findFirst({
-        where: { email },
-      })
-  
-      return passageiro ? this.mapToEntity(passageiro) : null;
-    }
+    const passageiro = await this.prisma.passageiro.findFirst({
+      where: { email },
+    })
+
+    return passageiro ? this.mapToEntity(passageiro) : null;
+  }
+
+  async countAll(): Promise<number> {
+    return await this.prisma.passageiro.count();
+  }
 }
