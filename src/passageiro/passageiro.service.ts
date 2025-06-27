@@ -72,6 +72,9 @@ export class PassageiroService {
         }),
       },
       orderBy: { [sort]: direction },
+      include: {
+        tipo: true,
+      },
     }); //faz a busca de todos os objs no banco
     return passageiro.map((passageiro) => this.mapToEntity(passageiro)); //map faz o parse do obj
   }
@@ -79,6 +82,9 @@ export class PassageiroService {
   async findOne(id: string): Promise<Passageiro> {
     const passageiro = await this.prisma.passageiro.findUnique({
       where: { id },
+      include: {
+        tipo: true,
+      },
     });
 
     if (!passageiro) {
