@@ -8,6 +8,7 @@ import { OperadorModule } from './operador/operador.module';
 import { MotoristaModule } from './motorista/motorista.module';
 import { AuthModule } from './auth/auth.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { ConfPresencaModule } from './confirmaPresenca/confPresenca.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     MotoristaModule,
     AuthModule,
     DashboardModule,
+    ConfPresencaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
