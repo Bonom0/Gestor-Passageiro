@@ -27,11 +27,11 @@ export class OperadorService {
         email: createOperadorDto.email,
         senha: createOperadorDto.senha,
         empresa: {
-          connect: { id: createOperadorDto.empresa }, // <-- aqui o connect correto
+          connect: { id: createOperadorDto.empresaId }, 
         },
         tipo: {
           connect: {
-            id: createOperadorDto.tipo,
+            id: createOperadorDto.tipo_usuario_id,
           },
         },
       },
@@ -56,6 +56,10 @@ export class OperadorService {
         }),
       },
       orderBy: { [sort]: direction },
+      include: {
+        tipo: true,
+        empresa: true,
+      },
     }); //faz a busca de todos os objs no banco
     return operador.map((operador) => this.mapToEntity(operador)); //map faz o parse do obj
   }
@@ -63,6 +67,10 @@ export class OperadorService {
   async findOne(id: string): Promise<Operador> {
     const operador = await this.prisma.operador.findUnique({
       where: { id },
+      include: {
+        tipo: true,
+        empresa: true,
+      },
     });
 
     if (!operador) {
@@ -76,20 +84,20 @@ export class OperadorService {
     id: string,
     updateOperadorDto: UpdateOperadorDto,
   ): Promise<Operador> {
-    const { tipo, empresa, ...restoDosCampos } = updateOperadorDto;
+    const { tipo_usuario_id, empresaId, ...restoDosCampos } = updateOperadorDto;
 
     const operador = await this.prisma.operador.update({
       where: { id },
       data: {
         ...restoDosCampos,
-        ...(tipo && {
+        ...(tipo_usuario_id && {
           tipo: {
-            connect: { id: tipo },
+            connect: { id: tipo_usuario_id },
           },
         }),
-        ...(empresa && {
+        ...(empresaId && {
           empresa: {
-            connect: { id: empresa },
+            connect: { id: empresaId },
           },
         }),
       },
