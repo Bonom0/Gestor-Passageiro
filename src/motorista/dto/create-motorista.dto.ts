@@ -1,6 +1,4 @@
-import { IsString } from 'class-validator';
-
-//objeto que vai ser trafegado no payload das requisições
+import { IsString, IsUUID, IsEmail } from 'class-validator';
 
 export class CreateMotoristaDto {
   @IsString()
@@ -15,9 +13,9 @@ export class CreateMotoristaDto {
   @IsString()
   contato: string;
 
-  @IsString()
-  tipo: string;
-
-  @IsString()
+  @IsEmail()
   email: string;
+
+  @IsUUID()
+  tipo_usuario_id: string;
 }
