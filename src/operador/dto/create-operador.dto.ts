@@ -13,8 +13,8 @@ export class CreateOperadorDto {
   senha: string;
 
   @IsString()
-  empresa: string;
+  empresaId: string;
 
   @IsString()
-  tipo: string;
+  tipo_usuario_id: string;
 }
