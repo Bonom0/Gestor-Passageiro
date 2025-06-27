@@ -1,4 +1,4 @@
-import { IsBoolean, IsString, IsDate } from 'class-validator';
+import { IsBoolean, IsString, IsDate, IsDateString } from 'class-validator';
 
 //objeto que vai ser trafegado no payload das requisições
 
@@ -21,7 +21,7 @@ export class CreatePassageiroDto {
   @IsString()
   contato: string;
 
-  @IsDate()
+  @IsDateString()
   horario_embarque: Date;
 
   @IsString()
@@ -30,7 +30,7 @@ export class CreatePassageiroDto {
   @IsBoolean()
   ativo: boolean;
 
-  @IsDate()
+  @IsDateString()
   dta_insert: Date;
 
   @IsString()
