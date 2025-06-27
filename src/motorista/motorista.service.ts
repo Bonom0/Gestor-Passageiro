@@ -1,99 +1,77 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from 'prisma/prisma.service';
 import { CreateMotoristaDto } from './dto/create-motorista.dto';
 import { UpdateMotoristaDto } from './dto/update-motorista.dto';
-import { Motorista } from './entities/motorista.entity';
-import { PrismaService } from 'prisma/prisma.service';
 
 @Injectable()
 export class MotoristaService {
   constructor(private prisma: PrismaService) {}
 
-  private mapToEntity(motorista: any): Motorista {
-    //pega o obj do banco e faz um parse para o modelo do nest
-    return {
-      id: motorista.id,
-      nome: motorista.nome,
-      cpf: motorista.cpf,
-      senha: motorista.senha,
-      contato: motorista.contato,
-      tipo: motorista.tipo,
-      email: motorista.email,
-    };
-  }
-
-  async create(createMotoristaDto: CreateMotoristaDto): Promise<Motorista> {
+  async create(createMotoristaDto: CreateMotoristaDto) {
     const motorista = await this.prisma.motorista.create({
       data: {
         nome: createMotoristaDto.nome,
         cpf: createMotoristaDto.cpf,
+        senha: createMotoristaDto.senha,
         contato: createMotoristaDto.contato,
         email: createMotoristaDto.email,
-        senha: createMotoristaDto.senha,
         tipo: {
           connect: {
-            id: createMotoristaDto.tipo,
+            id: createMotoristaDto.tipo_usuario_id,
           },
         },
       },
     });
-    return this.mapToEntity(motorista);
+
+    return motorista;
   }
 
-  async findAll(
-    nome?: string,
-    email?: string,
-    sort: 'nome' | 'email' = 'nome',
-    direction: 'asc' | 'desc' = 'asc',
-  ): Promise<Motorista[]> {
-    //faz a busca de todos os motoristas no banco de dados
-    const motorista = await this.prisma.motorista.findMany({
-      where: {
-        ...(nome?.trim() && {
-          nome: { contains: nome, mode: 'insensitive' },
-        }),
-        ...(email?.trim() && {
-          email: { contains: email, mode: 'insensitive' },
-        }),
+  async findAll(nome?: string, email?: string) {
+    const where: any = {};
+    if (nome) where.nome = { contains: nome, mode: 'insensitive' };
+    if (email) where.email = { contains: email, mode: 'insensitive' };
+    return this.prisma.motorista.findMany({
+      where,
+      include: {
+        tipo: true,
       },
-      orderBy: { [sort]: direction },
-    }); //faz a busca de todos os objs no banco
-    return motorista.map((motorista) => this.mapToEntity(motorista)); //map faz o parse do obj
+    });
   }
 
-  async findOne(id: string): Promise<Motorista> {
+  async findOne(id: string) {
     const motorista = await this.prisma.motorista.findUnique({
       where: { id },
+      include: {
+        tipo: true,
+      },
     });
 
     if (!motorista) {
-      throw new NotFoundException(`Motorista com ID${id} não encontrado`);
+      throw new NotFoundException(`Motorista com ID ${id} não encontrado`);
     }
 
-    return this.mapToEntity(motorista);
+    return motorista;
   }
 
-  async update(
-    id: string,
-    updateMotoristaDto: UpdateMotoristaDto,
-  ): Promise<Motorista> {
-    const { tipo, ...restoDosCampos } = updateMotoristaDto;
+  async update(id: string, updateMotoristaDto: UpdateMotoristaDto) {
+    const { tipo_usuario_id, ...dadosRestantes } = updateMotoristaDto;
 
     const motorista = await this.prisma.motorista.update({
       where: { id },
       data: {
-        ...restoDosCampos,
-        ...(tipo && {
+        ...dadosRestantes,
+        ...(tipo_usuario_id && {
           tipo: {
-            connect: { id: tipo },
+            connect: { id: tipo_usuario_id },
           },
         }),
       },
     });
 
-    return this.mapToEntity(motorista);
+    return motorista;
   }
 
-  async remove(id: string): Promise<Motorista> {
+  async remove(id: string) {
     const motoristaExistente = await this.prisma.motorista.findUnique({
       where: { id },
     });
@@ -102,22 +80,19 @@ export class MotoristaService {
       throw new NotFoundException(`Motorista com ID ${id} não encontrado`);
     }
 
-    const motoristaRemovido = await this.prisma.motorista.delete({
+    return this.prisma.motorista.delete({
       where: { id },
     });
-
-    return this.mapToEntity(motoristaRemovido);
   }
 
-  async findByEmail(email: string): Promise<Motorista | null> {
-    const motorista = await this.prisma.motorista.findFirst({
+  async findByEmail(email: string) {
+    return this.prisma.motorista.findUnique({
       where: { email },
-    })
-
-    return motorista ? this.mapToEntity(motorista) : null;
+      include: { tipo: true },
+    });
   }
 
-  async countAll(): Promise<number> {
-    return await this.prisma.motorista.count();
+  async countAll() {
+    return this.prisma.motorista.count();
   }
 }
