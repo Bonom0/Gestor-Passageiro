@@ -30,6 +30,7 @@ model Passageiro {
   tipo_usuario_id  String
   tipo             TipoUsuario @relation(fields: [tipo_usuario_id], references: [id])
   email            String
+  confirmacoesPresenca ConfirmacaoPresenca[]
 }
 
 model Operador {
@@ -50,7 +51,7 @@ model Motorista {
   nome            String
   cpf             String
   contato         String
-  email           String
+  email           String       @unique
   senha           String
   tipo_usuario_id String
   tipo            TipoUsuario  @relation(fields: [tipo_usuario_id], references: [id])
@@ -72,3 +73,12 @@ model TipoUsuario {
   operadores  Operador[]
   motoristas  Motorista[]
 }
+
+model ConfirmacaoPresenca {
+  id           String      @id @default(uuid())
+  data         DateTime    @default(now())
+  passageiroId String
+  presenca     Boolean     @default(false)
+  passageiro   Passageiro  @relation(fields: [passageiroId], references: [id])
+}
+
